@@ -21,7 +21,9 @@ class PlayMode(GameInit):
                 self.validMoves = self.gs.getValidMoves()
                 if len(self.validMoves) == 0:
                     self.gameOver = True
-
+                    # Nếu không bị chiếu tướng, đây là hòa cờ (stalemate)
+                    if not self.gs.inCheck:
+                        self.label_turn.set_text('Stalemate! Draw game.')
                 self.editChessPanel()
                 self.moveMade = False
 

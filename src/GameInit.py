@@ -124,7 +124,12 @@ class GameInit:
                     self.screen.blit(self.IMAGES[piece], pygame.Rect(j * SQ_SIZE, i * SQ_SIZE, SQ_SIZE, SQ_SIZE))
 
     def drawGameOver(self):
-        if self.gs.turn == 'w':
+        # Nếu không còn nước đi và không bị chiếu tướng => hòa cờ
+        if len(self.validMoves) == 0 and not self.gs.inCheck:
+            image_draw = pygame.transform.scale(pygame.image.load('./data/images/hoaco.png'), (2.62 * SQ_SIZE, SQ_SIZE))
+            image_draw.set_alpha(200)
+            self.screen.blit(image_draw, (191, 223))
+        elif self.gs.turn == 'w':
             self.screen.blit(self.image_black_win, (191, 223))
         else:
             self.screen.blit(self.image_white_win, (191, 223))

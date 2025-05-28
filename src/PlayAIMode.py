@@ -44,18 +44,18 @@ class PlayAIMode(GameInit):
                 self.__AIProcess()
 
             if self.moveMade:
-                if not self.human_turn:
-                    self.validMoves = self.gs.getValidMoves()
-                    # if len(self.validMoves) == 0:
-                    #     self.gameOver = True
-                    self.editAIPanel()
-                # else:
-                #     if self.aiEngine.bestMove is None:
-                #         self.gameOver = True
-
+                self.validMoves = self.gs.getValidMoves()
+                # Kiểm tra game over: không còn nước đi hợp lệ
+                if len(self.validMoves) == 0:
+                    self.gameOver = True
+                    # Nếu không bị chiếu tướng, đây là hòa cờ (stalemate)
+                    if not self.gs.inCheck:
+                        # Hiển thị thông báo hòa cờ
+                        self.label_turn.set_text('Stalemate! Draw game.')
                 self.isEndGame = self.__checkEndGame(self.gs)
                 self.aiEngine.isEndGame = self.isEndGame
                 print("end game: ", self.isEndGame)
+                self.editAIPanel()
                 self.editChessPanel()
                 self.moveMade = False
                 self.signal = True
