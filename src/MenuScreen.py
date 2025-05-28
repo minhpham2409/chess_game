@@ -27,6 +27,7 @@ class MenuScreen:
                                      theme=my_theme)
         self.menu.add.button("Play", button_id='PvP')
         self.menu.add.button("Play with AI", button_id='PvC')
+        self.menu.add.button("AI vs AI", button_id='AIVsAI')
         self.menu.add.button("Quit", sys.exit, 1)
 
         self.running = True

@@ -1,6 +1,7 @@
 # Simplified Evaluation Function
 import math
 import time
+import random
 
 from engine.ChessEngine import GameState
 from src.config import DEPTH
@@ -165,8 +166,10 @@ class AIEngine:
             return self.evaluation(gs)
 
         moves = gs.getValidMoves()
+        random.shuffle(moves)  # Thêm trộn ngẫu nhiên danh sách nước đi
         if maximizingPlayer:
             maxEval = - math.inf
+            bestMoves = []
             for move in moves:
                 gs.makeMove(move)
                 self.total_node += 1
@@ -175,10 +178,15 @@ class AIEngine:
                 if eval_score > maxEval:
                     maxEval = eval_score
                     if depth == DEPTH:
-                        self.bestMove = move
+                        bestMoves = [move]
+                elif eval_score == maxEval and depth == DEPTH:
+                    bestMoves.append(move)
+            if depth == DEPTH and bestMoves:
+                self.bestMove = random.choice(bestMoves)
             return maxEval
         else:
             minEval = math.inf
+            bestMoves = []
             for move in moves:
                 gs.makeMove(move)
                 self.total_node += 1
@@ -187,7 +195,11 @@ class AIEngine:
                 if eval_score < minEval:
                     minEval = eval_score
                     if depth == DEPTH:
-                        self.bestMove = move
+                        bestMoves = [move]
+                elif eval_score == minEval and depth == DEPTH:
+                    bestMoves.append(move)
+            if depth == DEPTH and bestMoves:
+                self.bestMove = random.choice(bestMoves)
             return minEval
 
     def __AlphaBetaPruning(self, gs: GameState, depth, alpha, beta, maximizingPlayer):
@@ -197,9 +209,11 @@ class AIEngine:
 
         start = time.time()
         moves = gs.getValidMoves()
+        random.shuffle(moves)  # Thêm trộn ngẫu nhiên danh sách nước đi
         self.timeGenerateMoves += time.time() - start
         if maximizingPlayer:
             maxEval = - math.inf
+            bestMoves = []
             for move in moves:
                 gs.makeMove(move)
                 self.total_node += 1
@@ -208,14 +222,19 @@ class AIEngine:
                 if eval_score > maxEval:
                     maxEval = eval_score
                     if depth == DEPTH:
-                        self.bestMove = move
+                        bestMoves = [move]
+                elif eval_score == maxEval and depth == DEPTH:
+                    bestMoves.append(move)
                 alpha = max(alpha, eval_score)
                 if beta <= alpha:
                     self.total_branch_cutoff += 1
                     break
+            if depth == DEPTH and bestMoves:
+                self.bestMove = random.choice(bestMoves)
             return maxEval
         else:
             minEval = math.inf
+            bestMoves = []
             for move in moves:
                 gs.makeMove(move)
                 self.total_node += 1
@@ -224,11 +243,15 @@ class AIEngine:
                 if eval_score < minEval:
                     minEval = eval_score
                     if depth == DEPTH:
-                        self.bestMove = move
+                        bestMoves = [move]
+                elif eval_score == minEval and depth == DEPTH:
+                    bestMoves.append(move)
                 beta = min(beta, eval_score)
                 if beta < alpha:
                     self.total_branch_cutoff += 1
                     break
+            if depth == DEPTH and bestMoves:
+                self.bestMove = random.choice(bestMoves)
             return minEval
 
     def evaluation(self, gs):

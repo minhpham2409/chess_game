@@ -28,6 +28,7 @@ class GameController:
         # Apply function handler for each button
         menuScreen.menu.get_widget('PvP').set_onreturn(self.__inPlayScreen)
         menuScreen.menu.get_widget('PvC').set_onreturn(self.__inPlayAIScreen)
+        menuScreen.menu.get_widget('AIVsAI').set_onreturn(self.__inPlayAIVsAIScreen)
 
         # Start menu loop
         menuScreen.mainLoop()
@@ -39,6 +40,12 @@ class GameController:
     def __inPlayAIScreen(self):
         playAIMode = PlayAIMode()
         playAIMode.mainLoop()
+        self.screen = pygame.display.set_mode((WIDTH_WINDOW, HEIGHT_WINDOW))
+
+    def __inPlayAIVsAIScreen(self):
+        from src.PlayAIVsAIMode import PlayAIVsAIMode
+        playAIVsAIMode = PlayAIVsAIMode()
+        playAIVsAIMode.mainLoop()
         self.screen = pygame.display.set_mode((WIDTH_WINDOW, HEIGHT_WINDOW))
 
 
